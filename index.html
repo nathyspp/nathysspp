@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy bird</title>
+    <link rel="stylesheet" href="estilos.css">
+    
+</head>
+
+<body>
+    <h1> Flappy Bird</h1>
+    <br>
+    <canvas id="myCanvas" width="1800" height="700"></canvas>
+    <audio id="Musica" src="song.mp3"></audio>
+    <audio id="Victoria" src="victory.mp3"></audio>
+    <audio id="Derrota" src="crash.mp3"></audio>
+
+    <script>
+        // Obtener el canvas y el contexto de dibujo
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Obtener el elemento audio
+        var music = document.getElementById("Musica");
+        var victoria = document.getElementById("Victoria");
+        var crash = document.getElementById("Derrota");
+
+        // Crear el elemento Image
+        var background = new Image();
+
+        // Cargar la imagen
+        background.src = "fondo.jpg";
+
+        // Posición inicial del cubo
+        var x = 50;
+        var y = 250;
+
+        // Velocidad del cubo
+        var speed = 1;
+
+        // Tamaño del cubo
+        var size = 20;
+
+        // Coordenadas de los obstáculos
+        var obstacles = [[200, 350], 
+                         [400, 400], 
+                         [600, 350], 
+                         [800, 350],
+                         [200, 0], 
+                         [400, 50], 
+                         [600, 0], 
+                         [800, 0],
+                         [1000, 350], 
+                         [1200, 400], 
+                         [1400, 350], 
+                         [1620, 320],
+                         [1000, 0], 
+                         [1200, 50], 
+                         [1400, 0], 
+                         [1595  , 0]];
+        var meta = [[1750, 0]];
+        
+
+        // Altura máxima del salto
+        var maxJumpHeight = 50;
+
+        // Altura actual del salto
+        var jumpHeight = 0;
+
+        // Estado del salto (subiendo o bajando)
+        var jumping = false;
+
+        // Controlar el evento de presionar una tecla
+        document.addEventListener("keydown", function (event) {
+            if (event.keyCode == 32) {  // Tecla espacio
+                if (!jumping) {
+                    // Iniciar el salto
+                    jumpHeight = 0;
+                    jumping = true;
+                }
+            }
+        });
+
+        function draw() {
+            // Dibujar la imagen en el canvas cuando esté cargada
+            if (background.complete) {
+                ctx.drawImage(background, 0, 0);
+            }
+
+            // Dibujar el cubo
+            ctx.fillStyle = "blue";
+            ctx.fillRect(x, y, size, size);
+
+            // Dibujar los obstáculos
+            ctx.fillStyle = "red";
+            for (var i = 0; i < obstacles.length; i++) {
+                ctx.fillRect(obstacles[i][0], obstacles[i][1], 50, 250);
+            }
+
+            // Dibujar la meta
+            ctx.fillStyle = "green";
+            for (var i = 0; i < meta.length; i++) {
+                ctx.fillRect(meta[i][0], meta[i][1], 50, 700);
+            }
+
+            
+            
+
+            // Comprobar colisión con los obstáculos
+            for (var i = 0; i < obstacles.length; i++) {
+                if (x < obstacles[i][0] + 50 &&
+                    x + size > obstacles[i][0] &&
+                    y < obstacles[i][1] + 250 &&
+                    y + size > obstacles[i][1]) {
+                    // Terminar el juego
+                    crash.play();
+                    console.log("Perdiste");
+                    music.pause();
+                    document.getElementById("mensaje1").removeAttribute("hidden");
+                    document.getElementById("reinicio").removeAttribute("hidden");
+                    return;
+                }
+            }
+
+            // Comprobar colisión con meta
+            for (var i = 0; i < meta.length; i++) {
+                if (x < meta[i][0] + 50 &&
+                    x + size > meta[i][0] &&
+                    y < meta[i][1] + 700 &&
+                    y + size > meta[i][1]) {
+                    // Terminar el juego
+                    victoria.play();
+                    console.log("Ganaste");
+                    document.getElementById("mensaje2").removeAttribute("hidden");
+                    document.getElementById("reinicio").removeAttribute("hidden");
+                    return;
+                }
+            }
+            
+
+            // Mover el cubo hacia la derecha
+            x += speed;
+
+            // Actualizar la altura del salto
+            if (jumping) {
+                jumpHeight++;
+                y -= 1;
+                if (jumpHeight >= maxJumpHeight) {
+                    jumping = false;
+                }
+            } else {
+                y += 1;
+            }
+
+            // Solicitar otro fotograma
+            requestAnimationFrame(draw);
+        }
+
+        // Reproducir la música
+        music.play();
+
+        // Iniciar el bucle de animación
+        draw();
+
+
+        // reiniciar juego
+
+        function reiniciar(){
+            location.reload();
+        }
+    </script>
+    <br>
+    <p id="mensaje1" hidden>PERDISTE!!</p>
+    <p id="mensaje2" hidden>GANASTE!!</p>
+    <button id="reinicio" onclick="reiniciar();" hidden>Reiniciar</button>
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+</body>
+
+</html>

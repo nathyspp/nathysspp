@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="estilos.css">
+    <canvas id="myCanvas" width="300" height="200"
+    style="border:1px solid #e68f8f;">
+    Your browser does not support the canvas element.
+    </canvas>
+    
+    <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx=canvas.getContext("2d");
+    ctx.font="40px Comic Sans";
+    ctx.fillStyle = "Green";
+    ctx.textAlign = "center";
+    ctx.fillText("Flappy Bird", canvas.width/2, canvas.height/2);
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>
